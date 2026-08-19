@@ -1,0 +1,39 @@
+# Local/production orchestration with a real PostgreSQL database.
+# NOTE: on a machine with normal internet access, Prisma Migrate works
+# out of the box (the offline workaround in scripts/generate.mjs is only
+# required for fully-offline sandboxes).
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ra
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: ra
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ra"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://ra:${POSTGRES_PASSWORD:-change-me}@db:5432/ra
+      AUTH_SECRET: ${AUTH_SECRET}
+      NODE_ENV: production
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-https://example.com}
+      APP_URL: ${NEXT_PUBLIC_APP_URL:-https://example.com}
+      STORAGE_DRIVER: ${STORAGE_DRIVER:-local}
+      EMAIL_DRIVER: ${EMAIL_DRIVER:-console}
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:

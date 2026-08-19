@@ -1,0 +1,40 @@
+# Dependencies
+/node_modules
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+
+# Build output
+/dist
+/build
+
+# Prisma generated client
+/src/generated/
+
+# Local database (PGlite) + uploads (never commit user content)
+/.data/
+/storage/
+/public/uploads/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Tests
+/coverage
+
+# OS / editor
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# TypeScript
+*.tsbuildinfo

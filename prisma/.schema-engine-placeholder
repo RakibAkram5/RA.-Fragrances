@@ -1,0 +1,8 @@
+#!/bin/sh
+# This placeholder exists so the Prisma CLI can run fully offline.
+# The native schema-engine binary normally downloads from binaries.prisma.sh,
+# which is unavailable in this sandbox. `prisma generate` only checks that a
+# schema engine *path* exists (generation itself uses the WASM schema parser),
+# so pointing PRISMA_SCHEMA_ENGINE_BINARY here skips the download. On a normal
+# machine with network access you may delete this file and remove the env var.
+echo "schema-engine-cli (offline placeholder)"
